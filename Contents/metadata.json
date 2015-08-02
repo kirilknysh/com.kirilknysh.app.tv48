@@ -1,0 +1,18 @@
+{
+	"identifier": "com.kirilknysh.app.tv48",
+	"name": "tv48",
+	"version": "0.0.1",
+	"author": "Kiril Knysh",
+	"company": "kirilknysh",
+	"copyright": "kirilknysh 2015",
+	"description": "Join the numbers to get as high number as possible!",
+	"categories": [
+		"games"
+	],
+	"scripts": "Javascript/init.js",
+	"images": {
+		"icon": {
+			"192x192": "Images/Icon.png"
+		}
+	}
+}
