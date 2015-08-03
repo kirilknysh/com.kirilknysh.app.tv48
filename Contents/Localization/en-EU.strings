@@ -1,1 +1,3 @@
-"TextButton" = "TextButton";
+"Start" = "Start";
+"Rows" = "Rows: %d";
+"Cols" = "Cols: %d";
