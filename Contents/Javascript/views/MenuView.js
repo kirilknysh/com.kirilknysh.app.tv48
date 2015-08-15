@@ -110,7 +110,7 @@ var MenuView = new MAF.Class({
 				width: view.MENU_WIDTH,
 				height: 60,
 				color: Theme.getStyles('BaseGlow', 'color'),
-				vOffset: 100,
+				vOffset: 100
 			},
 			textStyles:{
 				hOffset: 40

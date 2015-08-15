@@ -29,5 +29,11 @@ Theme.set({
 		styles: {
 			backgroundColor: '#0f0'
 		}
+	},
+
+	CellBackground: {
+		styles: {
+			backgroundColor: '#00f'
+		}
 	}
 });

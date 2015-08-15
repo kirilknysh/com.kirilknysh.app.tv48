@@ -11,6 +11,7 @@ var GameView = new MAF.Class({
 		view.parent();
 
 		view.model = new Grid(this.persist.rows, this.persist.cols);
+		view.onCellAdd_bound = view.onCellAdd.subscribeTo(view.model, 'addCell', this);
 	},
 
 	createView: function () {
@@ -26,6 +27,8 @@ var GameView = new MAF.Class({
 		}).appendTo(view);
 
 		view.renderGrid(view.model, view);
+
+		view.model.generateCells(2, 2);
 	},
 
 	renderGrid: function (grid, container) {
@@ -35,23 +38,63 @@ var GameView = new MAF.Class({
 				hOffset: (container.width - grid.gridWidth) / 2,
 				width: grid.gridWidth,
 				height: grid.gridHeight,
-				backgroundColor: Theme.getStyles('GridBackground', 'backgroundColor'),
+				backgroundColor: Theme.getStyles('GridBackground', 'backgroundColor')
 			}
 		}).appendTo(container);
 
+		this.elements.gridBg = gridBg;
+
 		for (var i = 0; i < grid.rows; i++) {
 			for (var j = 0; j < grid.cols; j++) {
-				new MAF.element.Container({
-					styles: {
-						vOffset: grid.cellGap + (i * (grid.cellHeight + grid.cellGap)),
-						hOffset: grid.cellGap + (j * (grid.cellWidth + grid.cellGap)),
-						width: grid.cellWidth,
-						height: grid.cellHeight,
-						backgroundColor: Theme.getStyles('CellPlaceholderBackground', 'backgroundColor'),
-					}
-				}).appendTo(gridBg);
+				this.renderCellPlaceholder(i, j).appendTo(gridBg);
 			}
 		}
+	},
+
+	renderCellPlaceholder: function (row, col) {
+		var grid = this.model;
+
+		return new MAF.element.Container({
+			styles: {
+				vOffset: grid.cellGap + (row * (grid.cellHeight + grid.cellGap)),
+				hOffset: grid.cellGap + (col * (grid.cellWidth + grid.cellGap)),
+				width: grid.cellWidth,
+				height: grid.cellHeight,
+				backgroundColor: Theme.getStyles('CellPlaceholderBackground', 'backgroundColor')
+			}
+		});
+	},
+
+	onCellAdd: function (e) {
+		var cellConfig = e.payload;
+
+		this.renderCell(cellConfig.row, cellConfig.col, cellConfig.value)
+			.appendTo(this.elements.gridBg);
+	},
+
+	renderCell: function (row, col, value) {
+		var grid = this.model,
+			cell;
+
+		return new MAF.element.Container({
+			styles: {
+				vOffset: grid.cellGap + (row * (grid.cellHeight + grid.cellGap)),
+				hOffset: grid.cellGap + (col * (grid.cellWidth + grid.cellGap)),
+				width: grid.cellWidth,
+				height: grid.cellHeight,
+				backgroundColor: Theme.getStyles('CellBackground', 'backgroundColor')
+			},
+			content: [
+				new MAF.element.Text({
+					width: grid.cellWidth,
+					height: grid.cellHeight,
+					label: value,
+					styles: {
+						anchorStyle: 'center'
+					}
+				})
+			]
+		});
 	},
 
 	updateView: function () {
@@ -60,5 +103,7 @@ var GameView = new MAF.Class({
 
 	hideView: function () {
 		var view = this;
+
+		view.onCellAdd_bound.unsubscribeFrom(view.model, 'addCell');
 	}
 });
