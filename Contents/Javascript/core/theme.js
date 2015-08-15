@@ -17,5 +17,17 @@ Theme.set({
 			color: '#000',
 			backgroundColor: '#fff'
 		}
+	},
+
+	GridBackground: {
+		styles: {
+			backgroundColor: '#f00'
+		}
+	},
+
+	CellPlaceholderBackground: {
+		styles: {
+			backgroundColor: '#0f0'
+		}
 	}
 });
