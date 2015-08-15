@@ -5,17 +5,11 @@ var GameView = new MAF.Class({
 
 	Extends: MAF.system.FullscreenView,
 
-	initialize: function () {
+	updateView: function () {
 		var view = this;
-
-		view.parent();
 
 		view.model = new Grid(this.persist.rows, this.persist.cols);
 		view.onCellAdd_bound = view.onCellAdd.subscribeTo(view.model, 'addCell', this);
-	},
-
-	createView: function () {
-		var view = this;
 
 		new MAF.element.Text({
 			text: 'tv48',
@@ -29,6 +23,14 @@ var GameView = new MAF.Class({
 		view.renderGrid(view.model, view);
 
 		view.model.generateCells(2, 2);
+	},
+
+	hideView: function () {
+		var view = this;
+
+		view.onCellAdd_bound.unsubscribeFrom(view.model, 'addCell');
+
+		this.elements.gridBg.suicide();
 	},
 
 	renderGrid: function (grid, container) {
@@ -95,15 +97,5 @@ var GameView = new MAF.Class({
 				})
 			]
 		});
-	},
-
-	updateView: function () {
-		var view = this;
-	},
-
-	hideView: function () {
-		var view = this;
-
-		view.onCellAdd_bound.unsubscribeFrom(view.model, 'addCell');
 	}
 });

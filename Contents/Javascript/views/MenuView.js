@@ -12,6 +12,12 @@ var MenuView = new MAF.Class({
 
 		view.store('rows', view.config.data.rows);
 		view.store('cols', view.config.data.cols);
+
+		view.store('minRows', view.config.data.minRows);
+		view.store('maxRows', view.config.data.maxRows);
+
+		view.store('minCols', view.config.data.minCols);
+		view.store('maxCols', view.config.data.maxCols);
 	},
 
 	createView: function () {
@@ -94,9 +100,9 @@ var MenuView = new MAF.Class({
 						return;
 					}
 
-					if (key === 'right') {
+					if (key === 'right' && view.retrieve('rows') < view.retrieve('maxRows')) {
 						view.store('rows', view.retrieve('rows') + 1);
-					} else if (key === 'left') {
+					} else if (key === 'left' && view.retrieve('rows') > view.retrieve('minRows')) {
 						view.store('rows', view.retrieve('rows') - 1);
 					}
 
@@ -163,9 +169,9 @@ var MenuView = new MAF.Class({
 						return;
 					}
 
-					if (key === 'right') {
+					if (key === 'right' && view.retrieve('cols') < view.retrieve('maxCols')) {
 						view.store('cols', view.retrieve('cols') + 1);
-					} else if (key === 'left') {
+					} else if (key === 'left' && view.retrieve('cols') > view.retrieve('minCols')) {
 						view.store('cols', view.retrieve('cols') - 1);
 					}
 
