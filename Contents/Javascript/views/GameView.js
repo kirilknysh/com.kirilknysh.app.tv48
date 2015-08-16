@@ -5,20 +5,22 @@ var GameView = new MAF.Class({
 
 	Extends: MAF.system.FullscreenView,
 
+	createView: function () {
+		new MAF.element.Text({
+			text: 'tv48',
+			styles:{
+				width: this.width,
+				fontSize: 60,
+				anchorStyle: 'center'
+			}
+		}).appendTo(this);
+	},
+
 	updateView: function () {
 		var view = this;
 
 		view.model = new Grid(this.persist.rows, this.persist.cols);
 		view.onCellAdd_bound = view.onCellAdd.subscribeTo(view.model, 'addCell', this);
-
-		new MAF.element.Text({
-			text: 'tv48',
-			styles:{
-				width: view.width,
-				fontSize: 60,
-				anchorStyle: 'center'
-			}
-		}).appendTo(view);
 
 		view.renderGrid(view.model, view);
 
