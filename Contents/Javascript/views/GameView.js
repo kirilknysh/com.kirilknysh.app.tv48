@@ -90,8 +90,7 @@ var GameView = new MAF.Class({
 				vOffset: grid.cellGap + (row * (grid.cellHeight + grid.cellGap)),
 				hOffset: grid.cellGap + (col * (grid.cellWidth + grid.cellGap)),
 				width: grid.cellWidth,
-				height: grid.cellHeight,
-				backgroundColor: Theme.getStyles('CellBackground', 'backgroundColor')
+				height: grid.cellHeight
 			},
 			content: [
 				new MAF.element.Text({

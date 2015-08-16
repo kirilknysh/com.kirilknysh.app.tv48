@@ -58,6 +58,7 @@ Grid.prototype.setCellElement = function (row, col, element) {
 	var cell = this.model[row][col];
 
 	cell.element = element;
+	cell.refreshValue();
 };
 
 Grid.prototype.refreshCells = function() {

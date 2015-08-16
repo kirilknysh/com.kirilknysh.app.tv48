@@ -19,6 +19,7 @@ Cell.prototype.clear = function () {
 Cell.prototype.refreshValue = function() {
 	if (this.element) {
 		this.element.content[0].setText(this.value);
+		this.element.setStyles(Theme.getStyles('CellBackground' + '_' + this.value));
 	}
 };
 
