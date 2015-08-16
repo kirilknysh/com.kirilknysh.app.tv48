@@ -19,25 +19,29 @@ var GameView = new MAF.Class({
 	updateView: function () {
 		var view = this;
 
-		view.model = new Grid(this.persist.rows, this.persist.cols);
-		view.onCellAdd_bound = view.onCellAdd.subscribeTo(view.model, 'addCell', this);
+		view.model = new Grid(view.persist.rows, view.persist.cols);
+		view.onCellAdd_bound = view.onCellAdd.subscribeTo(view.model, 'addCell', view);
 
 		view.renderGrid(view.model, view);
 
 		view.model.generateCells(2, 2);
+
+		view.onNavigate_bound = view.navigate.subscribeTo(view, 'onNavigate', view);
 	},
 
 	hideView: function () {
 		var view = this;
 
 		view.onCellAdd_bound.unsubscribeFrom(view.model, 'addCell');
+		view.onNavigate_bound.unsubscribeFrom(view, 'onNavigate');
 
 		view.model.destroy();
 		this.elements.gridBg.suicide();
 	},
 
 	renderGrid: function (grid, container) {
-		var gridBg = new MAF.element.Container({
+		var view = this,
+			gridBg = new MAF.element.Container({
 			styles: {
 				vOffset: 100,
 				hOffset: (container.width - grid.gridWidth) / 2,
@@ -104,5 +108,25 @@ var GameView = new MAF.Class({
 		grid.setCellElement(row, col, element);
 
 		return element;
+	},
+
+	navigate: function (event) {
+		var direction = this.getDirection(event);
+
+		if (!direction) {
+			return;
+		}
+	},
+
+	getDirection: function (event) {
+		var key;
+
+		if (event && event.payload) {
+			key = event.payload.direction;
+		} else if (event && event.Event && event.Event.detail) {
+			key = event.Event.detail.direction;
+		}
+
+		return key;
 	}
 });
