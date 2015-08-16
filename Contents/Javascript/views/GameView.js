@@ -70,9 +70,9 @@ var GameView = new MAF.Class({
 	},
 
 	onCellAdd: function (e) {
-		var cellConfig = e.payload;
+		var cell = e.payload;
 
-		this.renderCell(cellConfig.row, cellConfig.col, cellConfig.value)
+		this.renderCell(cell.row, cell.col, cell.value)
 			.appendTo(this.elements.gridBg);
 	},
 

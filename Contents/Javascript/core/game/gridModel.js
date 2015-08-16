@@ -1,3 +1,5 @@
+include('Javascript/core/game/cellModel.js');
+
 var MAX_GRID_HEIGHT = 650,//TODO: parametrize in constructor through view size
 	CELL_GAP_PER_CENT = 0.05;
 
@@ -15,7 +17,7 @@ Grid.prototype.init = function (rows, cols) {
 	for (var i = 0; i < rows; i++) {
 		this.model[i] = new Array(cols);
 		for (var j = 0; j < cols; j++) {
-			this.model[i][j] = null;//Full fill with custom objects
+			this.model[i][j] = new Cell(i, j, null);
 			this.freeCells.push(i * cols + j);
 		}
 	}
@@ -25,7 +27,7 @@ Grid.prototype.init = function (rows, cols) {
 
 Grid.prototype.generateCells = function (amount, value) {
 	var randIndex, combinedIndex,
-		targetRow, targetCol;
+		targetRow, targetCol, cell;
 
 	for (var i = 0; i < amount; i++) {
 		randIndex = Math.round(Math.random() * (this.freeCells.length - 1));
@@ -35,7 +37,9 @@ Grid.prototype.generateCells = function (amount, value) {
 		targetRow = (combinedIndex / this.cols)|0;
 		targetCol = combinedIndex % this.cols;
 
-		this.fire('addCell', { row: targetRow, col: targetCol, value: value });
+		cell = this.model[targetRow][targetCol];
+		cell.value = value;
+		this.fire('addCell', cell);
 	}
 };
 
