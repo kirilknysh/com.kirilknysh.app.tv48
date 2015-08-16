@@ -111,11 +111,16 @@ var GameView = new MAF.Class({
 	},
 
 	navigate: function (event) {
-		var direction = this.getDirection(event);
+		var view = this,
+			direction = this.getDirection(event);
 
 		if (!direction) {
 			return;
 		}
+
+		view.model.navigate(direction, function __onNavigationEnd__() {
+			view.model.generateCells(1, 2);
+		});
 	},
 
 	getDirection: function (event) {

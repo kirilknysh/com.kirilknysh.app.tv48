@@ -40,6 +40,8 @@ Grid.prototype.generateCells = function (amount, value) {
 		cell = this.model[targetRow][targetCol];
 		cell.value = value;
 		this.fire('addCell', cell);
+
+		this.refreshCells();
 	}
 };
 
@@ -56,6 +58,109 @@ Grid.prototype.setCellElement = function (row, col, element) {
 	var cell = this.model[row][col];
 
 	cell.element = element;
+};
+
+Grid.prototype.refreshCells = function() {
+	this.freeCells.length = 0;
+
+	for (var i = 0; i < this.rows; i++) {
+		for (var j = 0; j < this.cols; j++) {
+			this.model[i][j].updated = false;
+			if (!this.model[i][j].value) {
+				this.freeCells.push(i * this.cols + j);
+			}
+		}
+	}
+};
+
+Grid.prototype.navigate = function (direction, cb) {
+	if (direction === 'left') {
+		this._navigateLeft(cb);
+	}
+};
+
+Grid.prototype._navigateLeft = function (cb) {
+	var cell, targetCell,
+		grid = this,
+		animationsCount = 0;
+
+	function __onAnimationEnd__() {
+		animationsCount--;
+		if (animationsCount === 0) {
+			grid.refreshCells();
+			cb();
+		}
+	}
+
+	for (var j = 1; j < this.cols; j++) {
+		for (var i = 0; i < this.rows; i++) {
+			cell = this.model[i][j];
+
+			if (!cell.value) {
+				//skip empty cells;
+				continue;
+			}
+
+			for (var k = j - 1; k >= 0; k--) {
+				targetCell = this.model[i][k];
+
+				if (!targetCell.value) {
+					//empty cell, move on
+					continue;
+				}
+
+				if (targetCell.updated || targetCell.value !== cell.value) {
+					//we met the cell that was already updated in scope of this round
+					//or cell with value different from the current cell;
+					//take the previous cell;
+					targetCell = this.model[i][k + 1];
+					break;
+				}
+
+				if (targetCell.value === cell.value) {
+					//sum up cells as they have the same values;
+					break;
+				}
+			}
+
+			if (targetCell === cell) {
+				//the same cells => do nothing
+				continue;
+			}
+
+			if (targetCell.value === cell.value) {
+				targetCell.value += cell.value;
+			} else {
+				targetCell.value = cell.value;
+			}
+			targetCell.updated = true;
+			cell.value = null;
+			animationsCount++;
+			this.animateCell(cell, targetCell, __onAnimationEnd__);
+		}
+	}
+};
+
+Grid.prototype.animateCell = function(source, target, cb) {
+	if (source.element) {
+		source.element.animate({
+			duration: 0.5,
+			vOffset: this.cellGap + (target.row * (this.cellHeight + this.cellGap)),
+			hOffset: this.cellGap + (target.col * (this.cellWidth + this.cellGap))
+		});
+
+		(function __cellAnimationEnd__() {
+			if (!target.element) {
+				target.updated = false;
+				target.element = source.element;
+				source.element = null;
+			}
+			source.clear();
+			target.refreshValue();
+
+			cb();
+		}).subscribeOnce(source.element, 'onAnimationEnded');
+	}
 };
 
 Grid.prototype.destroy = function () {
