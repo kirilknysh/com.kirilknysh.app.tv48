@@ -1,4 +1,5 @@
 include('Javascript/core/game/gridModel.js');
+include('Javascript/core/game/theme-generator.js');
 
 var GameView = new MAF.Class({
 	ClassName: 'GameView',
@@ -21,6 +22,8 @@ var GameView = new MAF.Class({
 
 		view.model = new Grid(view.persist.rows, view.persist.cols);
 		view.onCellAdd_bound = view.onCellAdd.subscribeTo(view.model, 'addCell', view);
+
+		ThemeGenerator.generateCellsStyles(view.model.cellWidth);
 
 		view.renderGrid(view.model, view);
 
@@ -94,11 +97,11 @@ var GameView = new MAF.Class({
 			},
 			content: [
 				new MAF.element.Text({
-					width: grid.cellWidth,
-					height: grid.cellHeight,
 					label: value,
 					styles: {
-						anchorStyle: 'center'
+						anchorStyle: 'center',
+						width: grid.cellWidth,
+						height: grid.cellHeight
 					}
 				})
 			]

@@ -7,7 +7,7 @@ MAF.application.init({
 		{ id: 'view-MenuView', viewClass: MenuView, data: {
 			rows: 4, cols: 4,
 			minRows: 3, minCols: 3,
-			maxRows: 7, maxCols: 7
+			maxRows: 6, maxCols: 6
 		} },
 		{ id: 'view-GameView', viewClass: GameView }
 	],
