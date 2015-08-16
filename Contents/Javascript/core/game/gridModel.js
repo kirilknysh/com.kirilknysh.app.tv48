@@ -194,10 +194,10 @@ Grid.prototype._navigateRight = function (cb) {
 
 			if (targetCell.value === cell.value) {
 				targetCell.value += cell.value;
+				targetCell.updated = true;
 			} else {
 				targetCell.value = cell.value;
 			}
-			targetCell.updated = true;
 			cell.value = null;
 			animationsCount++;
 			this.animateCell(cell, targetCell, __onAnimationEnd__);
