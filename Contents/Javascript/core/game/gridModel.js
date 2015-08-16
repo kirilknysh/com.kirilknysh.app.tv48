@@ -76,6 +76,8 @@ Grid.prototype.refreshCells = function() {
 Grid.prototype.navigate = function (direction, cb) {
 	if (direction === 'left') {
 		this._navigateLeft(cb);
+	} else if (direction === 'right') {
+		this._navigateRight(cb);
 	}
 };
 
@@ -114,6 +116,68 @@ Grid.prototype._navigateLeft = function (cb) {
 					//or cell with value different from the current cell;
 					//take the previous cell;
 					targetCell = this.model[i][k + 1];
+					break;
+				}
+
+				if (targetCell.value === cell.value) {
+					//sum up cells as they have the same values;
+					break;
+				}
+			}
+
+			if (targetCell === cell) {
+				//the same cells => do nothing
+				continue;
+			}
+
+			if (targetCell.value === cell.value) {
+				targetCell.value += cell.value;
+			} else {
+				targetCell.value = cell.value;
+			}
+			targetCell.updated = true;
+			cell.value = null;
+			animationsCount++;
+			this.animateCell(cell, targetCell, __onAnimationEnd__);
+		}
+	}
+};
+
+Grid.prototype._navigateRight = function (cb) {
+	var cell, targetCell,
+		grid = this,
+		animationsCount = 0;
+
+	function __onAnimationEnd__() {
+		animationsCount--;
+		if (animationsCount === 0) {
+			grid.refreshCells();
+			cb();
+		}
+	}
+
+	for (var j = this.cols - 2; j >= 0; j--) {
+		for (var i = 0; i < this.rows; i++) {
+			cell = this.model[i][j];
+
+			if (!cell.value) {
+				//skip empty cells;
+				continue;
+			}
+
+			for (var k = j + 1; k < this.cols; k++) {
+				targetCell = this.model[i][k];
+
+				if (!targetCell.value) {
+					//empty cell, move on
+					continue;
+				}
+
+				if (targetCell.updated || targetCell.value !== cell.value) {
+					//we met the cell that was already updated in scope of this round
+					//or cell with value different from the current cell;
+					//take the previous cell;
+					targetCell = this.model[i][k - 1];
 					break;
 				}
 
