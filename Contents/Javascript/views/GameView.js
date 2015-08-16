@@ -32,6 +32,7 @@ var GameView = new MAF.Class({
 
 		view.onCellAdd_bound.unsubscribeFrom(view.model, 'addCell');
 
+		view.model.destroy();
 		this.elements.gridBg.suicide();
 	},
 
@@ -78,9 +79,9 @@ var GameView = new MAF.Class({
 
 	renderCell: function (row, col, value) {
 		var grid = this.model,
-			cell;
+			element;
 
-		return new MAF.element.Container({
+		element = new MAF.element.Container({
 			styles: {
 				vOffset: grid.cellGap + (row * (grid.cellHeight + grid.cellGap)),
 				hOffset: grid.cellGap + (col * (grid.cellWidth + grid.cellGap)),
@@ -99,5 +100,9 @@ var GameView = new MAF.Class({
 				})
 			]
 		});
+
+		grid.setCellElement(row, col, element);
+
+		return element;
 	}
 });

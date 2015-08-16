@@ -5,3 +5,10 @@ var Cell = function (row, col, value) {
 
 	this.element = null;
 };
+
+Cell.prototype.destroy = function () {
+	if (this.element) {
+		this.element.suicide();
+		this.element = null;
+	}
+};

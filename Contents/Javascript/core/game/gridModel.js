@@ -51,3 +51,17 @@ Grid.prototype.calculateRects = function (rows, cols) {
 	this.gridWidth = this.cellWidth * cols + (cols + 1) * this.cellGap;
 	this.gridHeight = this.cellHeight * rows + (rows + 1) * this.cellGap;
 };
+
+Grid.prototype.setCellElement = function (row, col, element) {
+	var cell = this.model[row][col];
+
+	cell.element = element;
+};
+
+Grid.prototype.destroy = function () {
+	for (var i = 0; i < this.rows; i++) {
+		for (var j = 0; j < this.cols; j++) {
+			this.model[i][j].destroy();
+		}
+	}
+};
