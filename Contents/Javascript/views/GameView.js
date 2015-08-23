@@ -114,7 +114,7 @@ var GameView = new MAF.Class({
 			},
 			content: [
 				new MAF.element.Text({
-					label: '',
+					label: currentAppConfig.get('bestScore'),
 					styles: {
 						anchorStyle: 'center',
 						width: statWidth,
@@ -171,14 +171,22 @@ var GameView = new MAF.Class({
 						this.element.animate({
 							duration: 0.15,
 							scale: 1
-						})
+						});
 					}
 				});
 		}
 	},
 
 	onScoreUpdate: function (e) {
+		var currentScore = e.payload,
+			bestScore = currentAppConfig.get('bestScore');
+
 		this.currentScoreStat.content[0].setText(e.payload);
+
+		if (currentScore > bestScore) {
+			currentAppConfig.set('bestScore', currentScore);
+			this.bestScoreStat.content[0].setText(e.payload);
+		}
 	},
 
 	renderCell: function (row, col, value) {

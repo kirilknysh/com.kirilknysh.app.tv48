@@ -18,6 +18,10 @@ var MenuView = new MAF.Class({
 
 		view.store('minCols', view.config.data.minCols);
 		view.store('maxCols', view.config.data.maxCols);
+
+		if (!currentAppConfig.get('bestScore')) {
+			currentAppConfig.set('bestScore', 0)
+		}
 	},
 
 	createView: function () {
