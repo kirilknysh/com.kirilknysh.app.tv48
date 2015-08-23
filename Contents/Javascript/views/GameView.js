@@ -47,6 +47,7 @@ var GameView = new MAF.Class({
 
 		view.model.destroy();
 		this.elements.gridBg.suicide();
+		this.elements.statsContainer.suicide();
 	},
 
 	renderGrid: function (grid, container) {
@@ -71,7 +72,7 @@ var GameView = new MAF.Class({
 	},
 
 	renderGameStats: function (grid, container) {
-		var statWidth = grid.cellWidth * 2,
+		var statWidth = container.width / 5,
 			statHeight = grid.cellHeight * 0.6;
 
 		var statsContainer = new MAF.element.Container({
@@ -126,6 +127,8 @@ var GameView = new MAF.Class({
 		}).appendTo(statsContainer);
 
 		statsContainer.appendTo(container);
+
+		this.elements.statsContainer = statsContainer;
 	},
 
 	renderCellPlaceholder: function (row, col) {

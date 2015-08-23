@@ -20,7 +20,7 @@ var MenuView = new MAF.Class({
 		view.store('maxCols', view.config.data.maxCols);
 
 		if (!currentAppConfig.get('bestScore')) {
-			currentAppConfig.set('bestScore', 0)
+			currentAppConfig.set('bestScore', 0);
 		}
 	},
 
