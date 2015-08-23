@@ -83,7 +83,17 @@ var GameView = new MAF.Class({
 		var cell = e.payload;
 
 		this.renderCell(cell.row, cell.col, cell.value)
-			.appendTo(this.elements.gridBg);
+			.appendTo(this.elements.gridBg)
+			.animate({
+				duration: 0.15,
+				scale: 1.1,
+				callback: function () {
+					this.element.animate({
+						duration: 0.15,
+						scale: 1
+					})
+				}
+			});
 	},
 
 	renderCell: function (row, col, value) {
