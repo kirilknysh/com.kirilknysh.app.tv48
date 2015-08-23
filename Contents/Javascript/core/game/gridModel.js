@@ -133,10 +133,10 @@ Grid.prototype._navigateLeft = function (cb) {
 
 			if (targetCell.value === cell.value) {
 				targetCell.value += cell.value;
+				targetCell.updated = true;
 			} else {
 				targetCell.value = cell.value;
 			}
-			targetCell.updated = true;
 			cell.value = null;
 			animationsCount++;
 			this.animateCell(cell, targetCell, __onAnimationEnd__);
@@ -207,6 +207,8 @@ Grid.prototype._navigateRight = function (cb) {
 };
 
 Grid.prototype.animateCell = function(source, target, cb) {
+	var cellToUtilize = null;
+
 	if (source.element) {
 		source.element.animate({
 			duration: 0.5,
@@ -214,17 +216,23 @@ Grid.prototype.animateCell = function(source, target, cb) {
 			hOffset: this.cellGap + (target.col * (this.cellWidth + this.cellGap))
 		});
 
-		(function __cellAnimationEnd__() {
-			if (!target.element) {
-				target.updated = false;
-				target.element = source.element;
-				source.element = null;
-			}
-			source.clear();
-			target.refreshValue();
+		if (!target.element) {
+			target.element = source.element;
+		} else {
+			cellToUtilize = source.element;
+		}
 
+		(function __cellAnimationEnd__() {
+			if (cellToUtilize) {
+				cellToUtilize.suicide();
+				cellToUtilize = null;
+			}
+			target.updated = false;
+			target.refreshValue();
 			cb();
 		}).subscribeOnce(source.element, 'onAnimationEnded');
+
+		source.element = null;
 	}
 };
 
