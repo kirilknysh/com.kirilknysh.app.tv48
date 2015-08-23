@@ -30,6 +30,8 @@ var GameView = new MAF.Class({
 		view.model.generateCells(2, 2);
 
 		view.onNavigate_bound = view.navigate.subscribeTo(view, 'onNavigate', view);
+
+		view.isNavigating = false;
 	},
 
 	hideView: function () {
@@ -116,12 +118,14 @@ var GameView = new MAF.Class({
 		var view = this,
 			direction = this.getDirection(event);
 
-		if (!direction) {
+		if (!direction || view.isNavigating) {
 			return;
 		}
 
+		view.isNavigating = true;
 		view.model.navigate(direction, function __onNavigationEnd__() {
 			view.model.generateCells(1, 2);
+			view.isNavigating = false;
 		});
 	},
 

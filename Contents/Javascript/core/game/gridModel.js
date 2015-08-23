@@ -339,7 +339,7 @@ Grid.prototype.animateCell = function(source, target, cb) {
 
 	if (source.element) {
 		source.element.animate({
-			duration: 0.5,
+			duration: 0.3,
 			vOffset: this.cellGap + (target.row * (this.cellHeight + this.cellGap)),
 			hOffset: this.cellGap + (target.col * (this.cellWidth + this.cellGap))
 		});
