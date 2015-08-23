@@ -335,7 +335,8 @@ Grid.prototype._navigateUp = function (cb) {
 };
 
 Grid.prototype.animateCell = function(source, target, cb) {
-	var cellToUtilize = null;
+	var grid = this,
+		cellToUtilize = null;
 
 	if (source.element) {
 		source.element.animate({
@@ -354,6 +355,8 @@ Grid.prototype.animateCell = function(source, target, cb) {
 			if (cellToUtilize) {
 				cellToUtilize.suicide();
 				cellToUtilize = null;
+
+				grid.fire('mergeCells', target);
 			}
 			target.updated = false;
 			target.refreshValue();

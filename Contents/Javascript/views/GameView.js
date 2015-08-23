@@ -22,6 +22,7 @@ var GameView = new MAF.Class({
 
 		view.model = new Grid(view.persist.rows, view.persist.cols);
 		view.onCellAdd_bound = view.onCellAdd.subscribeTo(view.model, 'addCell', view);
+		view.onCellMerge_bound = view.onCellMerge.subscribeTo(view.model, 'mergeCells', view);
 
 		ThemeGenerator.generateCellsStyles(view.model.cellWidth);
 
@@ -38,6 +39,7 @@ var GameView = new MAF.Class({
 		var view = this;
 
 		view.onCellAdd_bound.unsubscribeFrom(view.model, 'addCell');
+		view.onCellMerge_bound.unsubscribeFrom(view.model, 'mergeCells');
 		view.onNavigate_bound.unsubscribeFrom(view, 'onNavigate');
 
 		view.model.destroy();
@@ -86,7 +88,7 @@ var GameView = new MAF.Class({
 			.appendTo(this.elements.gridBg)
 			.animate({
 				duration: 0.15,
-				scale: 1.1,
+				scale: 0.9,
 				callback: function () {
 					this.element.animate({
 						duration: 0.15,
@@ -94,6 +96,24 @@ var GameView = new MAF.Class({
 					})
 				}
 			});
+	},
+
+	onCellMerge: function (e) {
+		var cell = e.payload;
+
+		if (cell && cell.element) {
+			cell.element
+				.animate({
+					duration: 0.15,
+					scale: 1.1,
+					callback: function () {
+						this.element.animate({
+							duration: 0.15,
+							scale: 1
+						})
+					}
+				});
+		}
 	},
 
 	renderCell: function (row, col, value) {
