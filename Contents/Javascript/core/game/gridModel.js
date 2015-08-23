@@ -4,6 +4,8 @@ var MAX_GRID_HEIGHT = 650,//TODO: parametrize in constructor through view size
 	CELL_GAP_PER_CENT = 0.05;
 
 var Grid = function (rows, cols) {
+	this._score = 0;
+
 	this.init(rows, cols);
 };
 
@@ -61,7 +63,7 @@ Grid.prototype.setCellElement = function (row, col, element) {
 	cell.refreshValue();
 };
 
-Grid.prototype.refreshCells = function() {
+Grid.prototype.refreshCells = function () {
 	this.freeCells.length = 0;
 
 	for (var i = 0; i < this.rows; i++) {
@@ -135,13 +137,7 @@ Grid.prototype._navigateLeft = function (cb) {
 				continue;
 			}
 
-			if (targetCell.value === cell.value) {
-				targetCell.value += cell.value;
-				targetCell.updated = true;
-			} else {
-				targetCell.value = cell.value;
-			}
-			cell.value = null;
+			this.swapCells(targetCell, cell);
 			animationsCount++;
 			this.animateCell(cell, targetCell, __onAnimationEnd__);
 		}
@@ -197,20 +193,14 @@ Grid.prototype._navigateRight = function (cb) {
 				continue;
 			}
 
-			if (targetCell.value === cell.value) {
-				targetCell.value += cell.value;
-				targetCell.updated = true;
-			} else {
-				targetCell.value = cell.value;
-			}
-			cell.value = null;
+			this.swapCells(targetCell, cell);
 			animationsCount++;
 			this.animateCell(cell, targetCell, __onAnimationEnd__);
 		}
 	}
 };
 
-Grid.prototype._navigateDown = function(cb) {
+Grid.prototype._navigateDown = function (cb) {
 	var cell, targetCell,
 		grid = this,
 		animationsCount = 0;
@@ -259,13 +249,7 @@ Grid.prototype._navigateDown = function(cb) {
 				continue;
 			}
 
-			if (targetCell.value === cell.value) {
-				targetCell.value += cell.value;
-				targetCell.updated = true;
-			} else {
-				targetCell.value = cell.value;
-			}
-			cell.value = null;
+			this.swapCells(targetCell, cell);
 			animationsCount++;
 			this.animateCell(cell, targetCell, __onAnimationEnd__);
 		}
@@ -321,20 +305,26 @@ Grid.prototype._navigateUp = function (cb) {
 				continue;
 			}
 
-			if (targetCell.value === cell.value) {
-				targetCell.value += cell.value;
-				targetCell.updated = true;
-			} else {
-				targetCell.value = cell.value;
-			}
-			cell.value = null;
+			this.swapCells(targetCell, cell);
 			animationsCount++;
 			this.animateCell(cell, targetCell, __onAnimationEnd__);
 		}
 	}
 };
 
-Grid.prototype.animateCell = function(source, target, cb) {
+Grid.prototype.swapCells = function (target, source) {
+	if (target.value === source.value) {
+		target.value += source.value;
+		target.updated = true;
+
+		this.addScore(target.value);
+	} else {
+		target.value = source.value;
+	}
+	source.value = null;
+};
+
+Grid.prototype.animateCell = function (source, target, cb) {
 	var grid = this,
 		cellToUtilize = null;
 
@@ -365,6 +355,16 @@ Grid.prototype.animateCell = function(source, target, cb) {
 
 		source.element = null;
 	}
+};
+
+Grid.prototype.getCurrentScore = function () {
+	return this._score;
+};
+
+Grid.prototype.addScore = function (add) {
+	this._score += add;
+
+	this.fire('scoreUpdate', this._score);
 };
 
 Grid.prototype.destroy = function () {

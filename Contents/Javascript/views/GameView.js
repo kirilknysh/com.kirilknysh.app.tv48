@@ -23,10 +23,12 @@ var GameView = new MAF.Class({
 		view.model = new Grid(view.persist.rows, view.persist.cols);
 		view.onCellAdd_bound = view.onCellAdd.subscribeTo(view.model, 'addCell', view);
 		view.onCellMerge_bound = view.onCellMerge.subscribeTo(view.model, 'mergeCells', view);
+		view.onScoreUpdate_bound = view.onScoreUpdate.subscribeTo(view.model, 'scoreUpdate', view);
 
 		ThemeGenerator.generateCellsStyles(view.model.cellWidth);
 
 		view.renderGrid(view.model, view);
+		view.renderGameStats(view.model, view);
 
 		view.model.generateCells(2, 2);
 
@@ -40,6 +42,7 @@ var GameView = new MAF.Class({
 
 		view.onCellAdd_bound.unsubscribeFrom(view.model, 'addCell');
 		view.onCellMerge_bound.unsubscribeFrom(view.model, 'mergeCells');
+		view.onScoreUpdate_bound.unsubscribeFrom(view.model, 'scoreUpdate');
 		view.onNavigate_bound.unsubscribeFrom(view, 'onNavigate');
 
 		view.model.destroy();
@@ -49,14 +52,14 @@ var GameView = new MAF.Class({
 	renderGrid: function (grid, container) {
 		var view = this,
 			gridBg = new MAF.element.Container({
-			styles: {
-				vOffset: 100,
-				hOffset: (container.width - grid.gridWidth) / 2,
-				width: grid.gridWidth,
-				height: grid.gridHeight,
-				backgroundColor: Theme.getStyles('GridBackground', 'backgroundColor')
-			}
-		}).appendTo(container);
+				styles: {
+					vOffset: 120 + grid.cellHeight,
+					hOffset: (container.width - grid.gridWidth) / 2,
+					width: grid.gridWidth,
+					height: grid.gridHeight,
+					backgroundColor: Theme.getStyles('GridBackground', 'backgroundColor')
+				}
+			}).appendTo(container);
 
 		this.elements.gridBg = gridBg;
 
@@ -65,6 +68,64 @@ var GameView = new MAF.Class({
 				this.renderCellPlaceholder(i, j).appendTo(gridBg);
 			}
 		}
+	},
+
+	renderGameStats: function (grid, container) {
+		var statWidth = grid.cellWidth * 2,
+			statHeight = grid.cellHeight * 0.6;
+
+		var statsContainer = new MAF.element.Container({
+			styles: {
+				vOffset: 100,
+				hOffset: 0,
+				width: container.width,
+				height: grid.cellHeight
+			}
+		});
+
+		this.currentScoreStat = new MAF.element.Container({
+			ClassName: 'CurrentScoreStat',
+			styles: {
+				vOffset: 0,
+				hOffset: container.width / 2 - statWidth - 50,
+				width: statWidth,
+				height: statHeight
+			},
+			content: [
+				new MAF.element.Text({
+					label: grid.getCurrentScore(),
+					styles: {
+						anchorStyle: 'center',
+						width: statWidth,
+						height: statHeight,
+						fontSize: 30
+					}
+				})
+			]
+		}).appendTo(statsContainer);
+
+		this.bestScoreStat = new MAF.element.Container({
+			ClassName: 'BestScoreStat',
+			styles: {
+				vOffset: 0,
+				hOffset: container.width / 2 + 50,
+				width: statWidth,
+				height: statHeight
+			},
+			content: [
+				new MAF.element.Text({
+					label: '',
+					styles: {
+						anchorStyle: 'center',
+						width: statWidth,
+						height: statHeight,
+						fontSize: 30
+					}
+				})
+			]
+		}).appendTo(statsContainer);
+
+		statsContainer.appendTo(container);
 	},
 
 	renderCellPlaceholder: function (row, col) {
@@ -93,7 +154,7 @@ var GameView = new MAF.Class({
 					this.element.animate({
 						duration: 0.15,
 						scale: 1
-					})
+					});
 				}
 			});
 	},
@@ -114,6 +175,10 @@ var GameView = new MAF.Class({
 					}
 				});
 		}
+	},
+
+	onScoreUpdate: function (e) {
+		this.currentScoreStat.content[0].setText(e.payload);
 	},
 
 	renderCell: function (row, col, value) {
