@@ -383,6 +383,13 @@ Grid.prototype.addScore = function (add) {
 	this.fire('scoreUpdate', this._score);
 };
 
+Grid.prototype.resetScore = function () {
+	this._score = 0;
+
+	//MAF can't fire events with parameter 0;
+	this.fire('scoreUpdate', -1);
+};
+
 Grid.prototype.canMove = function () {
 	var colsStarter = 0;
 
@@ -445,6 +452,16 @@ Grid.prototype.canMoveCell = function (cell) {
 
 Grid.prototype.canMergeCells = function (source, target) {
 	return source.value === target.value;
+};
+
+Grid.prototype.reset = function() {
+	for (var i = 0; i < this.rows; i++) {
+		for (var j = 0; j < this.cols; j++) {
+			this.model[i][j].clear();
+		}
+	}
+	this.refreshCells();
+	this.resetScore();
 };
 
 Grid.prototype.destroy = function () {

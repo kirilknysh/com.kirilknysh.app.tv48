@@ -73,7 +73,12 @@ var GameView = new MAF.Class({
 
 	renderGameStats: function (grid, container) {
 		var statWidth = container.width / 5,
-			statHeight = grid.cellHeight * 0.6;
+			statHeight = grid.cellHeight * 0.6,
+			bestScore = currentAppConfig.get('bestScore');
+
+		if (bestScore < 0) {
+			bestScore = 0;
+		}
 
 		var statsContainer = new MAF.element.Container({
 			styles: {
@@ -115,7 +120,7 @@ var GameView = new MAF.Class({
 			},
 			content: [
 				new MAF.element.Text({
-					label: currentAppConfig.get('bestScore'),
+					label: bestScore,
 					styles: {
 						anchorStyle: 'center',
 						width: statWidth,
@@ -143,6 +148,11 @@ var GameView = new MAF.Class({
 				backgroundColor: Theme.getStyles('CellPlaceholderBackground', 'backgroundColor')
 			}
 		});
+	},
+
+	startOver: function () {
+		this.model.reset();
+		this.model.generateCells(2, 2);
 	},
 
 	onCellAdd: function (e) {
@@ -184,7 +194,11 @@ var GameView = new MAF.Class({
 		var currentScore = e.payload,
 			bestScore = currentAppConfig.get('bestScore');
 
-		this.currentScoreStat.content[0].setText(e.payload);
+		if (currentScore < 0) {
+			currentScore = 0;
+		}
+
+		this.currentScoreStat.content[0].setText(currentScore);
 
 		if (currentScore > bestScore) {
 			currentAppConfig.set('bestScore', currentScore);
@@ -252,10 +266,28 @@ var GameView = new MAF.Class({
 
 	checkEnding: function () {
 		if (!this.model.canMove()) {
-			this.finishGame();
+			this.finishGame(this.model.getCurrentScore());
 		}
 	},
 
-	finishGame: function () {
+	finishGame: function (finishScore) {
+		this.displayFinishAlert(finishScore);
+	},
+
+	displayFinishAlert: function (score) {
+		var view = this;
+
+		new MAF.dialogs.Alert({
+			title: $_('GameOver'),
+			message: widget.getLocalizedString('EndingMessage', [ score ]),
+			buttons: [{
+				label: $_('TryAgain'),
+				callback: function () {
+					view.startOver();
+				}
+			}],
+			focusOnCompletion: this,
+			cancelCallback: function () { MAF.application.previousView(); }
+		}).show();
 	}
 });

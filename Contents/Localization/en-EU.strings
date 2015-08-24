@@ -1,3 +1,6 @@
 "Start" = "Start";
 "Rows" = "Rows: %d";
 "Cols" = "Cols: %d";
+"GameOver" = "Game over";
+"EndingMessage" = "Your result is %d. Good job but could be better!";
+"TryAgain" = "Try again"

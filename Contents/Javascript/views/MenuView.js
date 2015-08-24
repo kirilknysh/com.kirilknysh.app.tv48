@@ -21,7 +21,7 @@ var MenuView = new MAF.Class({
 
 		if (!currentAppConfig.get('bestScore')) {
 			//seems like a bug in MAF: can't store 0 as a number;
-			currentAppConfig.set('bestScore', 1);
+			currentAppConfig.set('bestScore', -1);
 		}
 	},
 
