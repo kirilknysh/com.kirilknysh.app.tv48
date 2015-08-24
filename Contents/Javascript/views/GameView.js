@@ -229,8 +229,10 @@ var GameView = new MAF.Class({
 		}
 
 		view.isNavigating = true;
-		view.model.navigate(direction, function __onNavigationEnd__() {
-			view.model.generateCells(1, 2);
+		view.model.navigate(direction, function __onNavigationEnd__(anyMovements) {
+			if (anyMovements) {
+				view.model.generateCells(1, 2);
+			}
 			view.isNavigating = false;
 		});
 	},

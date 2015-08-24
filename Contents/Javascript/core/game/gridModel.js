@@ -97,7 +97,7 @@ Grid.prototype._navigateLeft = function (cb) {
 		animationsCount--;
 		if (animationsCount === 0) {
 			grid.refreshCells();
-			cb();
+			cb(true);
 		}
 	}
 
@@ -142,6 +142,10 @@ Grid.prototype._navigateLeft = function (cb) {
 			this.animateCell(cell, targetCell, __onAnimationEnd__);
 		}
 	}
+
+	if (animationsCount === 0) {
+		cb(false);
+	}
 };
 
 Grid.prototype._navigateRight = function (cb) {
@@ -153,7 +157,7 @@ Grid.prototype._navigateRight = function (cb) {
 		animationsCount--;
 		if (animationsCount === 0) {
 			grid.refreshCells();
-			cb();
+			cb(true);
 		}
 	}
 
@@ -198,6 +202,10 @@ Grid.prototype._navigateRight = function (cb) {
 			this.animateCell(cell, targetCell, __onAnimationEnd__);
 		}
 	}
+
+	if (animationsCount === 0) {
+		cb(false);
+	}
 };
 
 Grid.prototype._navigateDown = function (cb) {
@@ -209,7 +217,7 @@ Grid.prototype._navigateDown = function (cb) {
 		animationsCount--;
 		if (animationsCount === 0) {
 			grid.refreshCells();
-			cb();
+			cb(true);
 		}
 	}
 
@@ -254,6 +262,10 @@ Grid.prototype._navigateDown = function (cb) {
 			this.animateCell(cell, targetCell, __onAnimationEnd__);
 		}
 	}
+
+	if (animationsCount === 0) {
+		cb(false);
+	}
 };
 
 Grid.prototype._navigateUp = function (cb) {
@@ -265,7 +277,7 @@ Grid.prototype._navigateUp = function (cb) {
 		animationsCount--;
 		if (animationsCount === 0) {
 			grid.refreshCells();
-			cb();
+			cb(true);
 		}
 	}
 
@@ -309,6 +321,10 @@ Grid.prototype._navigateUp = function (cb) {
 			animationsCount++;
 			this.animateCell(cell, targetCell, __onAnimationEnd__);
 		}
+	}
+
+	if (animationsCount === 0) {
+		cb(false);
 	}
 };
 
