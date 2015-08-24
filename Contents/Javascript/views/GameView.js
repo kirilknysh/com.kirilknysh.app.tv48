@@ -21,7 +21,7 @@ var GameView = new MAF.Class({
 	updateView: function () {
 		var view = this;
 
-		view.model = new Grid(view.persist.rows, view.persist.cols);
+		view.model = new Grid(view.persist.rows, view.persist.cols, view.height * 0.6);
 		view.onCellAdd_bound = view.onCellAdd.subscribeTo(view.model, 'addCell', view);
 		view.onCellMerge_bound = view.onCellMerge.subscribeTo(view.model, 'mergeCells', view);
 		view.onScoreUpdate_bound = view.onScoreUpdate.subscribeTo(view.model, 'scoreUpdate', view);
@@ -47,7 +47,10 @@ var GameView = new MAF.Class({
 		view.onNavigate_bound.unsubscribeFrom(view, 'onNavigate');
 
 		view.model.destroy();
+		view.model = null;
 		this.elements.gridBg.suicide();
+		this.elements.bestScoreStat.suicide();
+		this.elements.currentScoreStat.suicide();
 		this.elements.statsContainer.suicide();
 	},
 
@@ -90,7 +93,7 @@ var GameView = new MAF.Class({
 			}
 		});
 
-		this.currentScoreStat = new MAF.element.Container({
+		this.elements.currentScoreStat = new MAF.element.Container({
 			ClassName: 'CurrentScoreStat',
 			styles: {
 				vOffset: 0,
@@ -111,7 +114,7 @@ var GameView = new MAF.Class({
 			]
 		}).appendTo(statsContainer);
 
-		this.bestScoreStat = new MAF.element.Container({
+		this.elements.bestScoreStat = new MAF.element.Container({
 			ClassName: 'BestScoreStat',
 			styles: {
 				vOffset: 0,
@@ -199,11 +202,11 @@ var GameView = new MAF.Class({
 			currentScore = 0;
 		}
 
-		this.currentScoreStat.content[0].setText(currentScore);
+		this.elements.currentScoreStat.content[0].setText(currentScore);
 
 		if (currentScore > bestScore) {
 			currentAppConfig.set('bestScore', currentScore);
-			this.bestScoreStat.content[0].setText(e.payload);
+			this.elements.bestScoreStat.content[0].setText(e.payload);
 		}
 	},
 

@@ -1,10 +1,11 @@
 include('Javascript/core/game/cellModel.js');
 
-var MAX_GRID_HEIGHT = 650,//TODO: parametrize in constructor through view size
+var MAX_GRID_HEIGHT = 650,
 	CELL_GAP_PER_CENT = 0.05;
 
-var Grid = function (rows, cols) {
+var Grid = function (rows, cols, maxHeight) {
 	this._score = 0;
+	MAX_GRID_HEIGHT = maxHeight;
 
 	this.init(rows, cols);
 };
