@@ -383,6 +383,70 @@ Grid.prototype.addScore = function (add) {
 	this.fire('scoreUpdate', this._score);
 };
 
+Grid.prototype.canMove = function () {
+	var colsStarter = 0;
+
+	if (this.freeCells.length > 0) {
+		return true;
+	}
+
+	for (var i = 0; i < this.rows; i++) {
+		for (var j = colsStarter; j < this.cols; j += 2) {
+			if (this.canMoveCell(this.model[i][j])) {
+				return true;
+			}
+		}
+
+		//check cells in zig-zag order for better optimization;
+		colsStarter = (colsStarter === 0) ? 1 : 0;
+	}
+
+	return false;
+};
+
+Grid.prototype.canMoveCell = function (cell) {
+	var targetCellCol, targetCellRow;
+
+	if (cell.col > 0) {
+		//target cell to the left
+		targetCellCol = cell.col - 1;
+		targetCellRow = cell.row;
+		if (this.canMergeCells(cell, this.model[targetCellRow][targetCellCol])) {
+			return true;
+		}
+	}
+	if (cell.row > 0) {
+		//target cell to the top
+		targetCellCol = cell.col;
+		targetCellRow = cell.row - 1;
+		if (this.canMergeCells(cell, this.model[targetCellRow][targetCellCol])) {
+			return true;
+		}
+	}
+	if (cell.col < this.cols - 1) {
+		//target cell to the right
+		targetCellCol = cell.col + 1;
+		targetCellRow = cell.row;
+		if (this.canMergeCells(cell, this.model[targetCellRow][targetCellCol])) {
+			return true;
+		}
+	}
+	if (cell.row < this.rows - 1) {
+		//target cell to the bottom
+		targetCellCol = cell.col;
+		targetCellRow = cell.row + 1;
+		if (this.canMergeCells(cell, this.model[targetCellRow][targetCellCol])) {
+			return true;
+		}
+	}
+
+	return false;
+};
+
+Grid.prototype.canMergeCells = function (source, target) {
+	return source.value === target.value;
+};
+
 Grid.prototype.destroy = function () {
 	for (var i = 0; i < this.rows; i++) {
 		for (var j = 0; j < this.cols; j++) {

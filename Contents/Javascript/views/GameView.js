@@ -232,6 +232,7 @@ var GameView = new MAF.Class({
 		view.model.navigate(direction, function __onNavigationEnd__(anyMovements) {
 			if (anyMovements) {
 				view.model.generateCells(1, 2);
+				view.checkEnding();
 			}
 			view.isNavigating = false;
 		});
@@ -247,5 +248,14 @@ var GameView = new MAF.Class({
 		}
 
 		return key;
+	},
+
+	checkEnding: function () {
+		if (!this.model.canMove()) {
+			this.finishGame();
+		}
+	},
+
+	finishGame: function () {
 	}
 });
