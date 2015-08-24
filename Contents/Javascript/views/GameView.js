@@ -10,6 +10,7 @@ var GameView = new MAF.Class({
 		new MAF.element.Text({
 			text: 'tv48',
 			styles:{
+				vOffset: 50,
 				width: this.width,
 				fontSize: 60,
 				anchorStyle: 'center'
@@ -54,7 +55,7 @@ var GameView = new MAF.Class({
 		var view = this,
 			gridBg = new MAF.element.Container({
 				styles: {
-					vOffset: 120 + grid.cellHeight,
+					vOffset: 170 + grid.cellHeight,
 					hOffset: (container.width - grid.gridWidth) / 2,
 					width: grid.gridWidth,
 					height: grid.gridHeight,
@@ -82,7 +83,7 @@ var GameView = new MAF.Class({
 
 		var statsContainer = new MAF.element.Container({
 			styles: {
-				vOffset: 100,
+				vOffset: 150,
 				hOffset: 0,
 				width: container.width,
 				height: grid.cellHeight

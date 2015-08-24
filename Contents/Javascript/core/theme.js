@@ -15,7 +15,7 @@ Theme.set({
 	BaseFocus: {
 		styles: {
 			color: '#000',
-			backgroundColor: '#fff'
+			backgroundColor: '#208c8e'
 		}
 	},
 

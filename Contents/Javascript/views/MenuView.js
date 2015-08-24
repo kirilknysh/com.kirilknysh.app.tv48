@@ -3,7 +3,7 @@ var MenuView = new MAF.Class({
 
 	Extends: MAF.system.FullscreenView,
 
-	MENU_WIDTH: 400,
+	MENU_WIDTH: 500,
 
 	initialize: function () {
 		var view = this;
@@ -32,16 +32,18 @@ var MenuView = new MAF.Class({
 		new MAF.element.Text({
 			text: 'tv48',
 			styles:{
+				vOffset: 50,
 				width: view.width,
 				fontSize: 60,
-				anchorStyle: 'center'
+				anchorStyle: 'center',
+				color: '#f7b901'
 			}
 		}).appendTo(view);
 
 
 		container = new MAF.element.Container({
 			styles: {
-				vOffset: 250,
+				vOffset: 350,
 				hOffset: (view.width - view.MENU_WIDTH) / 2,
 				width: view.MENU_WIDTH,
 				height: 200
@@ -52,10 +54,11 @@ var MenuView = new MAF.Class({
 			styles: {
 				width: view.MENU_WIDTH,
 				height: 60,
-				color: Theme.getStyles('BaseGlow', 'color')
+				color: Theme.getStyles('BaseGlow', 'color'),
+				fontSize: 40
 			},
 			textStyles:{
-				hOffset: 40
+				hOffset: 60
 			},
 			content: [
 				new MAF.element.Text({
@@ -121,10 +124,11 @@ var MenuView = new MAF.Class({
 				width: view.MENU_WIDTH,
 				height: 60,
 				color: Theme.getStyles('BaseGlow', 'color'),
-				vOffset: 100
+				vOffset: 100,
+				fontSize: 40
 			},
 			textStyles:{
-				hOffset: 40
+				hOffset: 60
 			},
 			content: [
 				new MAF.element.Text({
@@ -190,11 +194,12 @@ var MenuView = new MAF.Class({
 			label: $_('Start'),
 			styles: {
 				width: view.MENU_WIDTH,
-				height: 60,
+				height: 100,
 				hOffset: (view.width - view.MENU_WIDTH) / 2,
-				vOffset: view.height - 100,
+				vOffset: view.height - 200,
 				backgroundColor: Theme.getStyles('BaseGlow', 'backgroundColor'),
-				color: Theme.getStyles('BaseGlow', 'color')
+				color: Theme.getStyles('BaseGlow', 'color'),
+				fontSize: 50
 			},
 			textStyles: {
 				anchorStyle: 'center'
