@@ -5,14 +5,14 @@
 	"author": "Kiril Knysh",
 	"company": "kirilknysh",
 	"copyright": "kirilknysh 2015",
-	"description": "Join the numbers to get as high number as possible!",
+	"description": "Join the same numbers to get as high number as possible!",
 	"categories": [
 		"games"
 	],
 	"scripts": "Javascript/init.js",
 	"images": {
 		"icon": {
-			"192x192": "Images/tv48-192.png"
+			"192x192": "Images/tv48-192-sq.png"
 		}
 	}
 }
